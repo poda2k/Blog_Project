@@ -5,6 +5,9 @@ import userRoute from './routes/userRoute';
 import DBC from './models/connection';
 import posts from './models/posts';
 import user from './models/user';
+import postsRoute from './routes/postsRoute' ;
+
+import testRoutes from './routes/test' ;
 
 
 dotenv.config() ;
@@ -19,6 +22,9 @@ posts.belongsTo(user,{foreignKey:'user_id'});
 
 app.use('/home',homeRoute) ;
 app.use('/user',userRoute);
+app.use('/posts',postsRoute);
+
+app.use('/tests',testRoutes) ;
 
 DBC.sync()
 .then(() =>{

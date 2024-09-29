@@ -3,31 +3,32 @@ import { Op } from "sequelize";
 import user from "../models/user";
 import bcryptjs from 'bcryptjs' ;
 import jwt from 'jsonwebtoken' ;
+import {IUserdata} from '../interfaces/dataBaseInterfaces' ;
 import { Hash } from "crypto";
 
 export const signup = async (req : Request, res :Response)=> {
 
-    const {username, password, email,phone} = req.body ;
+    const userData : IUserdata = req.body ;
     try{
         const checkForUser = await user.findOne(
             {
                 where:{
                [Op.or]:[
-                {username : username},
-                {email : email}
+                {username : userData.username},
+                {email : userData.email}
                ]
             }
         });
         if(checkForUser){
             res.json({message:"this username or email already exists"});
         }else{
-            const  hash = bcryptjs.hashSync(password, 8);
+            const  hash = bcryptjs.hashSync(userData.password!, 8);
 
             const createUser =  await user.create(
                             {
-                                username : username,
-                                email:email,
-                                phone : phone,
+                                username : userData.username,
+                                email:userData.email,
+                                phone : userData.phone,
                                 password : hash
                             }
                         );
@@ -62,19 +63,19 @@ export const signup = async (req : Request, res :Response)=> {
 }
 
 export const login = async (req : Request, res : Response) => {
-    const {username, password} = req.body ;
+    const userData : IUserdata = req.body ;
 
     const checkForUser = await user.findOne(
         {
             where:{
-                username: username
+                username: userData.username
             }
         }
     );
 
     if(checkForUser){
-        
-       const passCheck =  bcryptjs.compareSync(password, checkForUser.password);
+
+       const passCheck =  bcryptjs.compareSync(userData.password!, checkForUser.password);
 
        if(passCheck){
 
