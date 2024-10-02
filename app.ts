@@ -8,6 +8,8 @@ import user from './models/user';
 import postsRoute from './routes/postsRoute' ;
 
 import testRoutes from './routes/test' ;
+import multer from 'multer';
+import path from 'path';
 
 
 dotenv.config() ;
@@ -25,6 +27,23 @@ app.use('/user',userRoute);
 app.use('/posts',postsRoute);
 
 app.use('/tests',testRoutes) ;
+
+
+//multer configuration 
+
+// const storage  = multer.diskStorage({
+//     destination:(req,file,cb)=>{
+//         cb(null,"uploads/");
+//     },
+//     filename:(res,file,cb)=>{
+//         cb(null,Date.now()+path.extname(file.originalname));
+//     }
+// });
+// const upload = multer({ storage });
+
+
+
+app.use("/uploads",express.static("uploads"));
 
 DBC.sync()
 .then(() =>{

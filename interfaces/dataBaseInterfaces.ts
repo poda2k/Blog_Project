@@ -8,10 +8,9 @@ export interface IUserdata {
 } ;
 
 export interface IPostData {
-    id?:number ;
     content?:string ;
     description?:string ;
-    url?:string ;
+    url?:any ;
     created_at?:string ;
     updated_at?:string ;
     title?:string ;
