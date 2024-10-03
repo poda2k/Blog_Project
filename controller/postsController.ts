@@ -20,14 +20,7 @@ export const createPost = async(req:any, res:Response)=>{
     postData.url = req.file ;
     const userId = req['userId'] ;
     try{
-        // const savePost = await posts.create({
-        //     title : postData.title,
-        //     description : postData.description,
-        //     content : postData.content,
-        //     image_url : `/uploads/${postData.url.filename}`,
-        //     user_id : userId
-        // });
-        if(postData.url==null){
+        if(!File){
             const savePost = await posts.create({
                 title : postData.title,
                 description : postData.description,
@@ -37,7 +30,7 @@ export const createPost = async(req:any, res:Response)=>{
             });
             res.json({message:"data saved successfully", post: savePost});
         }
-        else if(postData.url!=null){
+        else{
             const savePost = await posts.create({
                 title : postData.title,
                 description : postData.description,
@@ -46,12 +39,24 @@ export const createPost = async(req:any, res:Response)=>{
                 user_id : userId
             });
             res.json({message:"data saved successfully", post: savePost});
-        }else{
-            res.json({message:"an error happened"}) ;
-    
         }
     }catch(err){
-        res.json({message:"an error happened"});
+        res.json({message:"invalid data"});
     }
 
+}
+
+export const getSinglePost = async(req: Request, res: Response)=>{
+    const postId = req.params.postId ;
+    try{
+        const saveSinglePost = await posts.findByPk(postId);
+        if(saveSinglePost){
+            res.json({message:"post fetched successfully", post: saveSinglePost});
+        }else{
+            res.json({message:"couldn`t find this post ;D"}) ;
+        }
+        
+    }catch(err){
+        res.json({message:"error in fetching that post !!!"});
+    }
 }
