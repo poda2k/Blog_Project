@@ -20,7 +20,7 @@ export const signup = async (req : Request, res :Response)=> {
             }
         });
         if(checkForUser){
-            res.json({message:"this username or email already exists"});
+            res.status(208).json({message:"this username or email already exists"});
         }else{
             const  hash = bcryptjs.hashSync(userData.password!, 8);
 
@@ -36,7 +36,7 @@ export const signup = async (req : Request, res :Response)=> {
                     userId : createUser.id
                 },'MySecretKey',
                 { expiresIn: "1d" });
-            res.json({message:"user registered successfully", createUser , token:token});
+            res.status(201).json({message:"user registered successfully", createUser , token:token});
             // another Bcrypt solution //
         //    const Bc = await bcryptjs.genSalt(10,(err,salt)=>{
         //         bcryptjs.hash(password,salt,(err,hash)=>{
@@ -57,7 +57,7 @@ export const signup = async (req : Request, res :Response)=> {
         }
     }catch(e){
         console.log("error in signup", e);
-        res.json({message:"fatal error"}) ;
+        res.status(400).json({message:"error in creating user"+e}) ;
     }
 
 }
@@ -84,13 +84,28 @@ export const login = async (req : Request, res : Response) => {
         },'MySecretKey',
         { expiresIn: "1d" });
 
-        res.json({message:"access granted",token : token });
+        res.status(200).json({message:"access granted",token : token });
        }else{
-        res.json({message:"access denied"});
+        res.status(401).json({message:"access denied"});
 
        }
     }else{
-        res.json({massage: "this username doesn`t exist"});
+        res.status(400).json({massage: "this username doesn`t exist"});
     }
 
+}
+
+export const getSingleUser = async(req: Request, res: Response)=>{
+    const userId = req.params.userId;
+
+    try {
+        const fetchSingleUser = await user.findByPk(userId);
+        if(fetchSingleUser){
+            res.status(200).json({message:"user fetched" , user : fetchSingleUser});
+        }else{
+            res.status(404).json({message: "user doesn`t exist"}) ;
+        }
+    }catch(err){
+        res.status(400).json({message: "error fetching single user"+err});
+    }
 }

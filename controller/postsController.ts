@@ -9,9 +9,9 @@ export const getAllPosts = async(req : Request, res : Response) =>{
     const Allposts : IPostData[] = await posts.findAll();
 
     if(Allposts.length==0){
-        res.json({message:"no posts yet !!!"}) ;
+        res.status(204).json({message:"no posts yet !!!"}) ;
     }else{
-        res.json({posts:Allposts}) ;
+        res.status(200).json({posts:Allposts}) ;
     }
 }
 
@@ -28,7 +28,7 @@ export const createPost = async(req:any, res:Response)=>{
                 image_url : null,
                 user_id : userId
             });
-            res.json({message:"data saved successfully", post: savePost});
+            res.status(201).json({message:"data saved successfully", post: savePost});
         }
         else{
             const savePost = await posts.create({
@@ -38,10 +38,10 @@ export const createPost = async(req:any, res:Response)=>{
                 image_url : `/uploads/${postData.url.filename}`,
                 user_id : userId
             });
-            res.json({message:"data saved successfully", post: savePost});
+            res.status(201).json({message:"data saved successfully", post: savePost});
         }
     }catch(err){
-        res.json({message:"invalid data"});
+        res.status(400).json({message:"invalid data"});
     }
 
 }
@@ -49,14 +49,14 @@ export const createPost = async(req:any, res:Response)=>{
 export const getSinglePost = async(req: Request, res: Response)=>{
     const postId = req.params.postId ;
     try{
-        const saveSinglePost = await posts.findByPk(postId);
-        if(saveSinglePost){
-            res.json({message:"post fetched successfully", post: saveSinglePost});
+        const fetchSinglePost = await posts.findByPk(postId);
+        if(fetchSinglePost){
+            res.status(200).json({message:"post fetched successfully", post: fetchSinglePost});
         }else{
-            res.json({message:"couldn`t find this post ;D"}) ;
+            res.status(404).json({message:"couldn`t find this post ;D"}) ;
         }
         
     }catch(err){
-        res.json({message:"error in fetching that post !!!"});
+        res.status(400).json({message:"error in fetching that post !!!"+err});
     }
 }

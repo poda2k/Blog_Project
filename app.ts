@@ -5,12 +5,11 @@ import userRoute from './routes/userRoute';
 import DBC from './models/connection';
 import posts from './models/posts';
 import user from './models/user';
+import comments from './models/comments';
+import categories from './models/categories';
 import postsRoute from './routes/postsRoute' ;
 
 import testRoutes from './routes/test' ;
-import multer from 'multer';
-import path from 'path';
-
 
 dotenv.config() ;
 
@@ -19,8 +18,17 @@ const app = express();
 const port = process.env.PORT||8030 ; // .env not operational 
 app.use(express.json()); // To parse JSON bodies
 app.use(express.urlencoded({ extended: true }));
+
 user.hasMany(posts,{foreignKey:'user_id'});
 posts.belongsTo(user,{foreignKey:'user_id'});
+
+user.hasMany(comments,{foreignKey:'userId'}) ;
+comments.belongsTo(user,{foreignKey:'userId'});
+
+posts.hasMany(comments,{foreignKey:'postId'});
+comments.belongsTo(posts,{foreignKey:'postId'});
+
+posts.belongsToMany(categories,{through:'cat_post'}) ;
 
 app.use('/home',homeRoute) ;
 app.use('/user',userRoute);
