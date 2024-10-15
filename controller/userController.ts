@@ -29,11 +29,13 @@ export const signup = async (req : Request, res :Response)=> {
                                 username : userData.username,
                                 email:userData.email,
                                 phone : userData.phone,
-                                password : hash
+                                password : hash,
+                                isAdmin : false
                             }
                         );
                 const token = jwt.sign({
-                    userId : createUser.id
+                    userId : createUser.id,
+                    isAdmin : createUser.isAdmin
                 },'MySecretKey',
                 { expiresIn: "1d" });
             res.status(201).json({message:"user registered successfully", createUser , token:token});
@@ -80,7 +82,8 @@ export const login = async (req : Request, res : Response) => {
        if(passCheck){
 
         const token = jwt.sign({
-            userId : checkForUser.id
+            userId : checkForUser.id,
+            isAdmin : checkForUser.isAdmin
         },'MySecretKey',
         { expiresIn: "1d" });
 

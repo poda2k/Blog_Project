@@ -5,7 +5,7 @@ export interface IUserdata {
     password?: string;
     email?: string;
     phone?: number;
-} ;
+};
 
 export interface IPostData {
     content?:string ;
@@ -15,4 +15,5 @@ export interface IPostData {
     updated_at?:string ;
     title?:string ;
     user_id?:number ;
-}
+};
+

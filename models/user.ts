@@ -8,6 +8,7 @@ class user extends Model {
     public password!: string;
     public email!: string;
     public phone!: string;
+    public isAdmin!: boolean;
 }
 
 user.init({
@@ -32,6 +33,10 @@ user.init({
     phone:{
         type : DataType.INTEGER ,
         allowNull : true
+    },
+    isAdmin:{
+        type : DataType.BOOLEAN ,
+        allowNull : false
     }
 },{
     sequelize ,

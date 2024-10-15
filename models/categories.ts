@@ -6,10 +6,10 @@ import sequelize from './connection' ;
 class categories extends Model {
     public id!:number ;
     public name!:string ;
+    public userId!:string ;
 }
 
 categories.init({
-
     id: {
         type : DataType.INTEGER,
         allowNull : false,
@@ -18,6 +18,10 @@ categories.init({
     },
     name: {
         type : DataType.STRING,
+        allowNull : false
+    },
+    userId:{
+        type : DataType.INTEGER,
         allowNull : false
     }
 

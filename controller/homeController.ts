@@ -7,7 +7,7 @@ export const home = async(req:any, res:Response) =>{
     console.log(userId);
     const getuser = await user.findByPk(userId);
     if(getuser){
-        res.json({message:'user granted access to this page',username:getuser.username});
+        res.json({message:'user access granted !!!!!',username:getuser.username});
     }else{
         res.json({message:'user not found'});
     }

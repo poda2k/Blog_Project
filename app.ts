@@ -1,4 +1,5 @@
 import express from 'express';
+import bcryptjs from 'bcryptjs' ;
 import dotenv from 'dotenv' ;
 import homeRoute from './routes/homeRoute';
 import userRoute from './routes/userRoute';
@@ -10,12 +11,14 @@ import categories from './models/categories';
 import postsRoute from './routes/postsRoute' ;
 
 import testRoutes from './routes/test' ;
+import categoriesRoute from './routes/categoriesRoute';
+import { Sequelize } from 'sequelize';
 
 dotenv.config() ;
 
 
 const app = express();
-const port = process.env.PORT||8030 ; // .env not operational 
+const port = process.env.PORT||8030 ; // .env not operational
 app.use(express.json()); // To parse JSON bodies
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,14 +33,28 @@ comments.belongsTo(posts,{foreignKey:'postId'});
 
 posts.belongsToMany(categories,{through:'cat_post'}) ;
 
+user.hasMany(categories,{foreignKey:'userId'}) ;
+categories.belongsTo(user,{foreignKey:'userId'});
+
 app.use('/home',homeRoute) ;
 app.use('/user',userRoute);
 app.use('/posts',postsRoute);
+app.use('/categories',categoriesRoute);
 
 app.use('/tests',testRoutes) ;
-
-
-//multer configuration 
+// const hashedPass = bcryptjs.hashSync('podasaccount101',8) ;
+// user.bulkCreate([
+//     {   id:2 ,
+//         username : "poda2k",
+//         email:"podayasser101@gmail.com",
+//         phone : 1287386582,
+//         password : hashedPass,
+//         isAdmin : true
+//     }]
+// ).then((response) => {
+//     console.log(response);
+// })
+//multer configuration
 
 // const storage  = multer.diskStorage({
 //     destination:(req,file,cb)=>{
@@ -59,5 +76,5 @@ DBC.sync()
         console.log("app up and running"+ port) ;
     }) ;
 }).catch((err) =>{
- console.log("error in database connection "+err);
+console.log("error in database connection "+err);
 });
