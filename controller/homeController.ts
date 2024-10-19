@@ -1,9 +1,9 @@
 import { Request , Response } from "express";
 import user from "../models/user";
 
-export const home = async(req:any, res:Response) =>{
+export const home = async(req:Request & {userId?:string}, res:Response) =>{
 
-    const userId = req['userId'];
+    const userId = req.userId;
     console.log(userId);
     const getuser = await user.findByPk(userId);
     if(getuser){

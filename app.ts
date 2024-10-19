@@ -1,5 +1,5 @@
 import express from 'express';
-import bcryptjs from 'bcryptjs' ;
+import bcryptjs from 'bcryptjs';
 import dotenv from 'dotenv' ;
 import homeRoute from './routes/homeRoute';
 import userRoute from './routes/userRoute';
@@ -12,7 +12,7 @@ import postsRoute from './routes/postsRoute' ;
 
 import testRoutes from './routes/test' ;
 import categoriesRoute from './routes/categoriesRoute';
-import { Sequelize } from 'sequelize';
+import cat_post from './models/cat_post';
 
 dotenv.config() ;
 
@@ -31,7 +31,8 @@ comments.belongsTo(user,{foreignKey:'userId'});
 posts.hasMany(comments,{foreignKey:'postId'});
 comments.belongsTo(posts,{foreignKey:'postId'});
 
-posts.belongsToMany(categories,{through:'cat_post'}) ;
+posts.belongsToMany(categories,{through:cat_post}) ;
+categories.belongsToMany(posts,{through:cat_post}) ;
 
 user.hasMany(categories,{foreignKey:'userId'}) ;
 categories.belongsTo(user,{foreignKey:'userId'});
@@ -44,7 +45,7 @@ app.use('/categories',categoriesRoute);
 app.use('/tests',testRoutes) ;
 // const hashedPass = bcryptjs.hashSync('podasaccount101',8) ;
 // user.bulkCreate([
-//     {   id:2 ,
+//     {   id:0 ,
 //         username : "poda2k",
 //         email:"podayasser101@gmail.com",
 //         phone : 1287386582,
@@ -65,7 +66,10 @@ app.use('/tests',testRoutes) ;
 //     }
 // });
 // const upload = multer({ storage });
-
+// cat_post.bulkCreate([{
+//     postId:1 ,
+//     categoryId:1
+// }]);
 
 
 app.use("/uploads",express.static("uploads"));
